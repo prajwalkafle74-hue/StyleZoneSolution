@@ -1,0 +1,5 @@
+# Update only these 3 lines to match your MySQL login
+DB_HOST = "localhost"
+DB_USER = "root"
+DB_PASSWORD = "Nepal"
+DB_NAME = "StyleZoneDB"

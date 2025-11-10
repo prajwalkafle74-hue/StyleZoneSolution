@@ -1,0 +1,23 @@
+# run_transaction.py
+from transaction_service import make_payment
+
+# Example transaction
+product = "Denim Jeans"
+price = 40.00
+qty = 2
+customer_type = "VIP"
+payment_method = "Cash"
+cash_given = 100.00
+
+total, change = make_payment(product, qty, price, customer_type, payment_method, cash_given)
+
+print("\n=== StyleZone Transaction ===")
+print(f"Product: {product}")
+print(f"Qty: {qty}")
+print(f"Price: ${price}")
+print(f"Customer Type: {customer_type}")
+print(f"Payment Method: {payment_method}")
+print(f"Total: ${total}")
+if change is not None:
+    print(f"Change: ${change}")
+print("=============================")

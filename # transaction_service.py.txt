@@ -1,0 +1,30 @@
+# transaction_service.py
+from db import conn
+from decimal import Decimal
+
+def compute_total(price, qty, discount_rate, tax_rate):
+    subtotal = Decimal(price) * qty
+    discount = subtotal * Decimal(discount_rate)
+    tax = (subtotal - discount) * Decimal(tax_rate)
+    total = subtotal - discount + tax
+    return round(total, 2)
+
+def make_payment(product_name, qty, price, customer_type, payment_method, cash_given=None):
+    # discount based on customer type
+    discount_rate = {"Regular": 0, "Student": 0.05, "VIP": 0.10}.get(customer_type, 0)
+    total = compute_total(price, qty, discount_rate, 0.15)
+
+    change = None
+    if payment_method == "Cash" and cash_given:
+        change = round(cash_given - total, 2)
+
+    c = conn()
+    cur = c.cursor()
+    cur.execute("""
+        INSERT INTO Payments(ProductId, Quantity, TotalAmount, PaymentMethod, PaymentStatus, CustomerName)
+        VALUES (1, %s, %s, %s, %s, %s)
+    """, (qty, float(total), payment_method, "Paid", customer_type))
+    c.commit()
+    c.close()
+
+    return total, change
